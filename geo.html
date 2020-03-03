@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocation</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNpQ8RSg71CG4wajZU-yo658aVL4NYnz4" async defer></script>
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="map"></div>
+    <div id="test">testing</div>
+
+    <script>
+        const fenceLat = 43.469600;
+        const fenceLong = -79.699000;
+        const range = 0.0005;
+
+        const n = fenceLat + range;
+        const s = fenceLat - range;
+        const e = fenceLong - range;
+        const w = fenceLong + range;
+
+        console.log(s, n);
+        console.log(w, e);
+
+        function onSuccess(position) {
+            initMap(position.coords.latitude, position.coords.longitude);
+        }
+
+        function onError(error) {
+            alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+        }
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+        var map;
+
+        function initMap(LAT, LONG) {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: LAT,
+                    lng: LONG
+                },
+                zoom: 15
+
+            });
+
+            console.log("current");
+            console.log(LAT, LONG);
+
+            if ((LAT >= s) && (LAT <= n) && (LONG >= e) && (LONG <= w)) {
+                document.getElementById("test").innerHTML = "in range";
+            } else {
+                document.getElementById("test").innerHTML = "not in range";
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
